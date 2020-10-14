@@ -12,8 +12,8 @@ namespace Template
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        Texture2D man;
-        Vector2 manPos = new Vector2(40, 200);
+        Texture2D entityTexture;
+        Vector2 entityPos = new Vector2(40, 200);
 
         Texture2D croshair;
         Vector2 cursorPos;
@@ -40,7 +40,6 @@ namespace Template
             { '0', '0', '0', '0', '0', '0', '0', '0', '0', '0' , '0', '0', '0', '0', '0', '0', '0', '0', '1', '1'}
 
         };
-
 
         //KOmentar
         public Game1()
@@ -77,10 +76,29 @@ namespace Template
             groundTexture = Content.Load<Texture2D>("groundTexture");
             rock = Content.Load<Texture2D>("rock");
 
-            man = Content.Load<Texture2D>("man");
+            entityTexture = Content.Load<Texture2D>("man");
             croshair = Content.Load<Texture2D>("croshair");
 
-            player = new Player(man, manPos);
+
+            Color[] data = new Color[entityTexture.Height*entityTexture.Width];
+            entityTexture.GetData(data);
+            for (int i = 0; i < data.Length; i++)
+            {
+                if (data[i].R >= 230)
+                    data[i].A = 0;
+            }
+            entityTexture.SetData(data);
+
+            data = new Color[rock.Height * rock.Width];
+            rock.GetData(data);
+            for (int i = 0; i < data.Length; i++)
+            {
+                if (data[i].R >= 230)
+                    data[i].A = 0;
+            }
+            rock.SetData(data);
+
+            player = new Player(entityTexture, entityPos);
 
 
 
@@ -109,14 +127,10 @@ namespace Template
             MouseState Mstate = Mouse.GetState();
             cursorPos = new Vector2(Mstate.X, Mstate.Y);
 
-            cursorPos = Mouse.GetState().Position.ToVector2();
-
-
-
             // TODO: Add your update logic here
 
             base.Update(gameTime);
-            player.Update(gameTime);
+            player.Update();
         }
 
         /// <summary>
@@ -129,7 +143,7 @@ namespace Template
 
             // TODO: Add your drawing code here.
 
-            spriteBatch.Begin();
+            spriteBatch.Begin(SpriteSortMode.Texture,BlendState.NonPremultiplied);
 
             for (int y = 0; y < map.GetLength(0); y++)
             {
