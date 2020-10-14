@@ -13,13 +13,19 @@ namespace Template
         SpriteBatch spriteBatch;
 
         Texture2D man;
+        Vector2 manPos = new Vector2(40, 200);
+
+        Texture2D croshair;
+        Vector2 cursorPos;
+
         Player player;
 
         Texture2D groundTexture;
+        Texture2D rock;
 
         const int BLOCK_SIZE = 40;
 
-        char[,] map = new char[,] { 
+        char[,] map = new char[,] {
             { '0', '0', '0', '0', '0', '0', '0', '0', '0', '0' , '0', '0', '0', '0', '0', '0', '0', '0', '1', '1'},
             { '0', '0', '0', '0', '0', '0', '1', '1', '1', '1' , '1', '1', '1', '0', '0', '0', '0', '0', '1', '1'},
             { '0', '0', '0', '0', '0', '0', '1', '1', '1', '0' , '0', '0', '1', '0', '0', '0', '0', '0', '1', '1'},
@@ -27,7 +33,7 @@ namespace Template
             { '1', '1', '1', '1', '1', '1', '1', '1', '1', '1' , '1', '1', '1', '1', '1', '1', '1', '1', '1', '1'},
             { '1', '1', '1', '0', '0', '1', '1', '1', '1', '1' , '1', '1', '1', '1', '1', '1', '1', '1', '1', '1'},
             { '1', '1', '1', '0', '0', '1', '1', '1', '1', '1' , '1', '1', '1', '1', '1', '1', '1', '1', '1', '1'},
-            { '1', '1', '1', '1', '1', '1', '1', '1', '1', '1' , '1', '1', '1', '1', '1', '1', '1', '1', '1', '1'},
+            { '1', '1', '1', '1', '1', '1', '1', '1', '1', '2' , '1', '1', '1', '1', '1', '1', '1', '1', '1', '1'},
             { '1', '1', '1', '1', '1', '1', '1', '1', '1', '1' , '1', '1', '1', '1', '1', '1', '1', '1', '1', '1'},
             { '0', '0', '0', '0', '0', '0', '1', '1', '1', '0' , '0', '0', '1', '0', '0', '0', '0', '0', '1', '1'},
             { '0', '0', '0', '0', '0', '0', '1', '1', '1', '1' , '1', '1', '1', '0', '0', '0', '0', '0', '1', '1'},
@@ -54,6 +60,8 @@ namespace Template
         {
             // TODO: Add your initialization logic here
 
+            //IsMouseVisible = true;
+
             base.Initialize();
         }
 
@@ -66,11 +74,13 @@ namespace Template
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            groundTexture = Content.Load<Texture2D> ("groundTexture");
+            groundTexture = Content.Load<Texture2D>("groundTexture");
+            rock = Content.Load<Texture2D>("rock");
 
             man = Content.Load<Texture2D>("man");
+            croshair = Content.Load<Texture2D>("croshair");
 
-            player = new Player(man);
+            player = new Player(man, manPos);
 
 
 
@@ -96,11 +106,17 @@ namespace Template
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            
+            MouseState Mstate = Mouse.GetState();
+            cursorPos = new Vector2(Mstate.X, Mstate.Y);
+
+            cursorPos = Mouse.GetState().Position.ToVector2();
+
+
 
             // TODO: Add your update logic here
 
             base.Update(gameTime);
+            player.Update(gameTime);
         }
 
         /// <summary>
@@ -119,14 +135,28 @@ namespace Template
             {
                 for (int x = 0; x < map.GetLength(1); x++)
                 {
-                    if(map[y,x] == '1')
+                    if (map[y, x] == '1')
                     {
-                        spriteBatch.Draw(groundTexture, new Rectangle(x*BLOCK_SIZE, y*BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE), Color.White);
+                        spriteBatch.Draw(groundTexture, new Rectangle(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE), Color.White);
+                    }
+                }
+            }
+
+            for (int y = 0; y < map.GetLength(0); y++)
+            {
+                for (int x = 0; x < map.GetLength(1); x++)
+                {
+                    if (map[y, x] == '2')
+                    {
+                        spriteBatch.Draw(groundTexture, new Rectangle(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE), Color.White);
+                        spriteBatch.Draw(rock, new Rectangle(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE), Color.White);
                     }
                 }
             }
 
             player.Draw(spriteBatch);
+
+            spriteBatch.Draw(croshair, new Rectangle((int)cursorPos.X - 50, (int)cursorPos.Y - 50, 100, 100), Color.Purple);
 
             spriteBatch.End();
 
