@@ -7,13 +7,13 @@ namespace Template
 {
     abstract class BaseClass
     {
-        protected Texture2D entityTexture;
-        protected Vector2 entityPos;
+        protected Texture2D texture;
+        protected Vector2 texturePos;
 
-        public BaseClass(Texture2D entityTexture, Vector2 entityPos)
+        public BaseClass(Texture2D texture, Vector2 texturePos)
         {
-            this.entityTexture = entityTexture;
-            this.entityPos = entityPos;
+            this.texture = texture;
+            this.texturePos = texturePos;
         }
 
         public abstract void Update();

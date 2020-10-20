@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -10,9 +14,14 @@ namespace Template
         Vector2 mousePos;
         float angle = 0;
 
-        public Player(Texture2D entityTexture, Vector2 entityPos) : base(entityTexture, entityPos)
+        //var properties = new Properties();
+        //properties.Health = 100;
+
+        Properties instance = new Properties(health:, healthBar);
+
+        public Player(Texture2D texture, Vector2 texturePos) : base(texture, texturePos)
         {
-            
+
         }
 
         public override void Update()
@@ -21,33 +30,33 @@ namespace Template
 
             if (kstate.IsKeyDown(Keys.W))
             {
-                entityPos.Y -= 3;
+                texturePos.Y -= 3;
             }
             if (kstate.IsKeyDown(Keys.A))
             {
-                entityPos.X -= 3;
+                texturePos.X -= 3;
             }
             if (kstate.IsKeyDown(Keys.S))
             {
-                entityPos.Y += 3;
+                texturePos.Y += 3;
             }
             if (kstate.IsKeyDown(Keys.D))
             {
-                entityPos.X += 3;
+                texturePos.X += 3;
             }
 
             if (Mouse.GetState().LeftButton == ButtonState.Pressed)
             {
-                //shooting?
+                weapon.Shoot();
             }
 
             mousePos = Mouse.GetState().Position.ToVector2();
-            angle = (float)Math.Atan2(entityPos.Y - mousePos.Y, entityPos.X - mousePos.X) + (float)(Math.PI);
+            angle = (float)Math.Atan2(texturePos.Y - mousePos.Y, texturePos.X - mousePos.X) + (float)(Math.PI);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(entityTexture, new Rectangle((int)entityPos.X, (int)entityPos.Y, 40, 40), null, Color.White, angle, new Vector2(entityTexture.Width / 2, entityTexture.Height / 2), SpriteEffects.None, 0);
+            spriteBatch.Draw(texture, new Rectangle((int)texturePos.X, (int)texturePos.Y, 40, 40), null, Color.White, angle, new Vector2(/*entityPos.X +*/ texture.Width / 2,/* entityPos.Y +*/ texture.Height / 2), SpriteEffects.None, 0);
         }
     }
 }

@@ -12,13 +12,14 @@ namespace Template
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        Texture2D entityTexture;
-        Vector2 entityPos = new Vector2(40, 200);
+        Texture2D texture, bulletTexture;
+        Vector2 texturePos = new Vector2(40, 200);
 
         Texture2D croshair;
         Vector2 cursorPos;
 
         Player player;
+        Weapon bullet;
 
         Texture2D groundTexture;
         Texture2D rock;
@@ -76,18 +77,20 @@ namespace Template
             groundTexture = Content.Load<Texture2D>("groundTexture");
             rock = Content.Load<Texture2D>("rock");
 
-            entityTexture = Content.Load<Texture2D>("man");
+            texture = Content.Load<Texture2D>("man");
             croshair = Content.Load<Texture2D>("croshair");
 
+            bulletTexture = Content.Load<Texture2D>("bullet");
 
-            Color[] data = new Color[entityTexture.Height*entityTexture.Width];
-            entityTexture.GetData(data);
+
+            Color[] data = new Color[texture.Height * texture.Width];       //fixa png
+            texture.GetData(data);
             for (int i = 0; i < data.Length; i++)
             {
                 if (data[i].R >= 230)
                     data[i].A = 0;
             }
-            entityTexture.SetData(data);
+            texture.SetData(data);
 
             data = new Color[rock.Height * rock.Width];
             rock.GetData(data);
@@ -96,11 +99,10 @@ namespace Template
                 if (data[i].R >= 230)
                     data[i].A = 0;
             }
-            rock.SetData(data);
+            rock.SetData(data);                                             //fixa png
 
-            player = new Player(entityTexture, entityPos);
-
-
+            player = new Player(texture, texturePos);
+            bullet = new Weapon(texture, texturePos, bullets);
 
             // TODO: use this.Content to load your game content here 
         }
@@ -143,7 +145,7 @@ namespace Template
 
             // TODO: Add your drawing code here.
 
-            spriteBatch.Begin(SpriteSortMode.Texture,BlendState.NonPremultiplied);
+            spriteBatch.Begin(SpriteSortMode.Texture, BlendState.NonPremultiplied);
 
             for (int y = 0; y < map.GetLength(0); y++)
             {
