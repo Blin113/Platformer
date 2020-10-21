@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -12,17 +13,18 @@ namespace Template
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        Texture2D texture, bulletTexture;
-        Vector2 texturePos = new Vector2(40, 200);
+        Texture2D groundTexture;
+        Texture2D rock;
 
         Texture2D croshair;
         Vector2 cursorPos;
 
-        Player player;
-        Weapon bullet;
+        Texture2D texture, bulletTexture;
+        Vector2 bulletPos;
+        Vector2 texturePos = new Vector2(40, 200);
 
-        Texture2D groundTexture;
-        Texture2D rock;
+        Player player;
+        WeaponHandler weaponHandler;
 
         const int BLOCK_SIZE = 40;
 
@@ -102,7 +104,7 @@ namespace Template
             rock.SetData(data);                                             //fixa png
 
             player = new Player(texture, texturePos);
-            bullet = new Weapon(texture, texturePos, bullets);
+            weaponHandler = new WeaponHandler(bulletTexture, bulletPos);
 
             // TODO: use this.Content to load your game content here 
         }

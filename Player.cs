@@ -12,12 +12,14 @@ namespace Template
     class Player : BaseClass
     {
         Vector2 mousePos;
-        float angle = 0;
+        public float angle = 0;
+
+        public WeaponHandler weaponHandler;
 
         //var properties = new Properties();
         //properties.Health = 100;
 
-        Properties instance = new Properties(health:, healthBar);
+        //Properties instance = new Properties(health, healthBar);
 
         public Player(Texture2D texture, Vector2 texturePos) : base(texture, texturePos)
         {
@@ -47,7 +49,7 @@ namespace Template
 
             if (Mouse.GetState().LeftButton == ButtonState.Pressed)
             {
-                weapon.Shoot();
+                weaponHandler.Shoot(texturePos, angle);
             }
 
             mousePos = Mouse.GetState().Position.ToVector2();

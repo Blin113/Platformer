@@ -9,24 +9,17 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Template
 {
-    class Weapon : BaseClass
+    class Weapon
     {
-        List<int> bullets;
+        public List<Vector2> bullets;
 
-        public Weapon(Texture2D texture, Vector2 texturePos, List<int> bullets) : base(texture, texturePos)
+        public Weapon(Texture2D texture, Vector2 texturePos)
         {
-            this.bullets = bullets;
+
         }
 
-        public override void Update() {
+        public void Update() {
             
         }
-
-        void Shoot()
-        {
-
-        }
-
-        public override void Draw(SpriteBatch spriteBatch) { }
     }
 }
