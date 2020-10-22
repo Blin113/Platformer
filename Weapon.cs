@@ -18,8 +18,9 @@ namespace Template
 
         }
 
-        public void Update() {
-            
+        public void Update()
+        {
+
         }
     }
 }

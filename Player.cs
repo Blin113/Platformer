@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -11,9 +7,6 @@ namespace Template
 {
     class Player : BaseClass
     {
-        Vector2 mousePos;
-        public float angle = 0;
-
         public WeaponHandler weaponHandler;
 
         //var properties = new Properties();
@@ -21,7 +14,7 @@ namespace Template
 
         //Properties instance = new Properties(health, healthBar);
 
-        public Player(Texture2D texture, Vector2 texturePos) : base(texture, texturePos)
+        public Player(Texture2D texture, Vector2 texturePos, float angle, Vector2 mousePos) : base(texture, texturePos, angle, mousePos)
         {
 
         }
@@ -47,13 +40,13 @@ namespace Template
                 texturePos.X += 3;
             }
 
+            mousePos = Mouse.GetState().Position.ToVector2();
+            angle = (float)Math.Atan2(texturePos.Y - mousePos.Y, texturePos.X - mousePos.X) + (float)(Math.PI);
+
             if (Mouse.GetState().LeftButton == ButtonState.Pressed)
             {
                 weaponHandler.Shoot(texturePos, angle);
             }
-
-            mousePos = Mouse.GetState().Position.ToVector2();
-            angle = (float)Math.Atan2(texturePos.Y - mousePos.Y, texturePos.X - mousePos.X) + (float)(Math.PI);
         }
 
         public override void Draw(SpriteBatch spriteBatch)

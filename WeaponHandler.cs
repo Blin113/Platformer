@@ -1,19 +1,22 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Template
 {
     class WeaponHandler
     {
+        Bullet bullet;
+
         List<Bullet> bullets;
         Texture2D bulletTexture;
 
-        Vector2 speed;
+        public WeaponHandler(Texture2D bulletTexture, Vector2 speed, Point size)
+        {
+            this.bulletTexture = bulletTexture;
+            bullet.speed = speed;
+            bullet.size = size;
+        }
 
         public void Update()
         {
@@ -21,12 +24,11 @@ namespace Template
             {
                 item.Update();
             }
-
         }
 
-        public void Shoot(Vector2 playerPos, float angle)
+        public void Shoot(Vector2 playerPos, float angle, Vector2 speed, Point size, Vector2 mousePos)
         {
-            bullets.Add(new Bullet(bulletTexture, playerPos, speed, angle));
+            bullets.Add(new Bullet(bulletTexture, playerPos, speed, angle, size, mousePos));
         }
     }
 }
