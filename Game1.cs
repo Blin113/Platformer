@@ -111,8 +111,8 @@ namespace Template
             rock.SetData(data);                                             //fixa png
 
             player = new Player(texture, texturePos, angle, mousePos);
-            weaponHandler = new WeaponHandler(bulletTexture, speed, size);
-            bullet = new Bullet(bulletTexture, speed, angle, size);
+            weaponHandler = new WeaponHandler(bulletTexture);
+            bullet = new Bullet(bulletTexture, texturePos, speed, angle, size, mousePos);
 
             // TODO: use this.Content to load your game content here 
         }
@@ -141,7 +141,11 @@ namespace Template
 
             // TODO: Add your update logic here
 
+
+
             base.Update(gameTime);
+            weaponHandler.Update();
+            bullet.Update();
             player.Update();
         }
 

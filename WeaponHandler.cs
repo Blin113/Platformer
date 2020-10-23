@@ -7,15 +7,16 @@ namespace Template
     class WeaponHandler
     {
         Bullet bullet;
+        Vector2 speed;
+        Point size;
 
-        List<Bullet> bullets;
+        List<Bullet> bullets = new List<Bullet>();
         Texture2D bulletTexture;
 
-        public WeaponHandler(Texture2D bulletTexture, Vector2 speed, Point size)
+        public WeaponHandler(Texture2D bulletTexture)
         {
             this.bulletTexture = bulletTexture;
-            bullet.speed = speed;
-            bullet.size = size;
+
         }
 
         public void Update()

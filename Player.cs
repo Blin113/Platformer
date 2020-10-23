@@ -7,7 +7,14 @@ namespace Template
 {
     class Player : BaseClass
     {
-        public WeaponHandler weaponHandler;
+        WeaponHandler weaponHandler;
+
+        Bullet bullet;
+        Vector2 speed;
+        Point size;
+
+        MouseState old;
+        MouseState current;
 
         //var properties = new Properties();
         //properties.Health = 100;
@@ -23,6 +30,8 @@ namespace Template
         {
             KeyboardState kstate = Keyboard.GetState();
 
+
+            //player movement
             if (kstate.IsKeyDown(Keys.W))
             {
                 texturePos.Y -= 3;
@@ -40,13 +49,40 @@ namespace Template
                 texturePos.X += 3;
             }
 
+
+            //border
+            if (texturePos.X <= 20)
+            {
+                texturePos.X = 20;
+            }
+            if (texturePos.X >= 780)
+            {
+                texturePos.X = 780;
+            }
+            if (texturePos.Y <= 20)
+            {
+                texturePos.Y = 20;
+            }
+            if (texturePos.Y >= 460)
+            {
+                texturePos.Y = 460;
+            }
+
+
+            //shooting and rotation
             mousePos = Mouse.GetState().Position.ToVector2();
             angle = (float)Math.Atan2(texturePos.Y - mousePos.Y, texturePos.X - mousePos.X) + (float)(Math.PI);
 
-            if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+
+            old = current;
+            current = Mouse.GetState();
+
+            if (current.LeftButton == ButtonState.Pressed && old.LeftButton == ButtonState.Released)
             {
-                weaponHandler.Shoot(texturePos, angle);
+                weaponHandler.Shoot(texturePos, angle, speed, size, mousePos);
             }
+
+            old = Mouse.GetState();
         }
 
         public override void Draw(SpriteBatch spriteBatch)
