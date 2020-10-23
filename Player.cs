@@ -8,6 +8,7 @@ namespace Template
     class Player : BaseClass
     {
         WeaponHandler weaponHandler;
+        Texture2D bulletTexture;
 
         Bullet bullet;
         Vector2 speed;
@@ -73,6 +74,8 @@ namespace Template
             mousePos = Mouse.GetState().Position.ToVector2();
             angle = (float)Math.Atan2(texturePos.Y - mousePos.Y, texturePos.X - mousePos.X) + (float)(Math.PI);
 
+
+            weaponHandler = new WeaponHandler(bulletTexture);
 
             old = current;
             current = Mouse.GetState();
