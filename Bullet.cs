@@ -22,6 +22,8 @@ namespace Template
             angle = (float)Math.Atan2(texturePos.Y - mousePos.Y, texturePos.X - mousePos.X) + (float)(Math.PI);
 
             texturePos += speed;
+
+            
         }
 
         public override void Draw(SpriteBatch spriteBatch)

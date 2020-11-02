@@ -10,13 +10,12 @@ namespace Template
         Vector2 speed;
         Point size;
 
-        List<Bullet> bullets = new List<Bullet>();
+        public static List<Bullet> bullets = new List<Bullet>();
         Texture2D bulletTexture;
 
         public WeaponHandler(Texture2D bulletTexture)
         {
             this.bulletTexture = bulletTexture;
-
         }
 
         public void Update()
