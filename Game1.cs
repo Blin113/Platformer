@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
 
 namespace Template
 {
@@ -27,6 +28,7 @@ namespace Template
         Vector2 texturePos = new Vector2(40, 200);
         Point size;
         Vector2 speed;
+        List<Bullet> bullets1 = new List<Bullet>();
 
         //classes
         Player player;
@@ -111,7 +113,8 @@ namespace Template
             rock.SetData(data);                                             //fixa png
 
             player = new Player(texture, texturePos, angle, mousePos);
-            weaponHandler = new WeaponHandler(bulletTexture);
+            weaponHandler = new WeaponHandler(bullets1);
+            player.SetWeaponHandler(weaponHandler);
             bullet = new Bullet(bulletTexture, texturePos, speed, angle, size, mousePos);
 
             // TODO: use this.Content to load your game content here 
@@ -145,8 +148,9 @@ namespace Template
 
             base.Update(gameTime);
             weaponHandler.Update();
-            bullet.Update();
+            //bullet.Update();
             player.Update();
+            
         }
 
         /// <summary>
@@ -188,7 +192,10 @@ namespace Template
 
             spriteBatch.Draw(croshair, new Rectangle((int)cursorPos.X - 50, (int)cursorPos.Y - 50, 100, 100), Color.Purple);
 
-            bullet.Draw(spriteBatch);
+            foreach(Bullet item in bullets1)
+            {
+                item.Draw(spriteBatch);
+            }
 
             spriteBatch.End();
 

@@ -6,16 +6,11 @@ namespace Template
 {
     class WeaponHandler
     {
-        Bullet bullet;
-        Vector2 speed;
-        Point size;
+        List<Bullet> bullets = new List<Bullet>();
 
-        public static List<Bullet> bullets = new List<Bullet>();
-        Texture2D bulletTexture;
-
-        public WeaponHandler(Texture2D bulletTexture)
+        public WeaponHandler(List<Bullet> bullets1)
         {
-            this.bulletTexture = bulletTexture;
+            bullets = bullets1;
         }
 
         public void Update()
@@ -26,7 +21,7 @@ namespace Template
             }
         }
 
-        public void Shoot(Vector2 playerPos, float angle, Vector2 speed, Point size, Vector2 mousePos)
+        public void Shoot(Texture2D bulletTexture, Vector2 playerPos, float angle, Vector2 speed, Point size, Vector2 mousePos)
         {
             bullets.Add(new Bullet(bulletTexture, playerPos, speed, angle, size, mousePos));
         }

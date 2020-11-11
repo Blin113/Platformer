@@ -13,17 +13,16 @@ namespace Template
         public Bullet(Texture2D texture, Vector2 texturePos, Vector2 speed, float angle, Point size, Vector2 mousePos) : base(texture, texturePos, angle, mousePos)
         {
             this.speed = speed;
-            this.size = size;
+            //this.size = size;
         }
 
         public override void Update()
         {
-            mousePos = Mouse.GetState().Position.ToVector2();
-            angle = (float)Math.Atan2(texturePos.Y - mousePos.Y, texturePos.X - mousePos.X) + (float)(Math.PI);
+            //mousePos = Mouse.GetState().Position.ToVector2();
+            //angle = (float)Math.Atan2(texturePos.Y - mousePos.Y, texturePos.X - mousePos.X) + (float)(Math.PI);
 
-            texturePos += speed;
-
-            
+            //texturePos += speed;
+            texturePos += new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle)) * 2;
         }
 
         public override void Draw(SpriteBatch spriteBatch)
