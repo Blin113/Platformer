@@ -10,6 +10,12 @@ namespace Template
         protected float angle = 0;
         protected Vector2 mousePos;
 
+        public Vector2 Position
+        {
+            get => texturePos;
+            set => texturePos = value;
+        }
+
         public BaseClass(Texture2D texture, Vector2 texturePos, float angle, Vector2 mousePos)
         {
             this.texture = texture;

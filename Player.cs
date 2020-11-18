@@ -9,9 +9,6 @@ namespace Template
     class Player : BaseClass
     {
         WeaponHandler weaponHandler;
-        Vector2 speed;
-        Point size;
-        
 
         MouseState old;
         MouseState current;
@@ -34,19 +31,19 @@ namespace Template
             //player movement
             if (kstate.IsKeyDown(Keys.W))
             {
-                texturePos.Y -= 3;
+                texturePos.Y -= 2;
             }
             if (kstate.IsKeyDown(Keys.A))
             {
-                texturePos.X -= 3;
+                texturePos.X -= 2;
             }
             if (kstate.IsKeyDown(Keys.S))
             {
-                texturePos.Y += 3;
+                texturePos.Y += 2;
             }
             if (kstate.IsKeyDown(Keys.D))
             {
-                texturePos.X += 3;
+                texturePos.X += 2;
             }
 
 
@@ -86,7 +83,7 @@ namespace Template
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture, new Rectangle((int)texturePos.X, (int)texturePos.Y, 40, 40), null, Color.White, angle, new Vector2(/*entityPos.X +*/ texture.Width / 2,/* entityPos.Y +*/ texture.Height / 2), SpriteEffects.None, 0);
+            spriteBatch.Draw(texture, new Rectangle((int)texturePos.X + 9, (int)texturePos.Y, 40, 40), null, Color.White, angle, new Vector2(/*entityPos.X +*/ texture.Width / 2,/* entityPos.Y +*/ texture.Height / 2), SpriteEffects.None, 0);
         }
 
         public void SetWeaponHandler(WeaponHandler wH)

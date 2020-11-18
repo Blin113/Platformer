@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 using System.Collections.Generic;
 
 namespace Template
@@ -98,8 +99,8 @@ namespace Template
             texture.GetData(data);
             for (int i = 0; i < data.Length; i++)
             {
-                if (data[i].R >= 230)
-                    data[i].A = 0;
+                if (data[i].R >= 220)
+                    data[i] = new Color(0,0,0,0);
             }
             texture.SetData(data);
 
@@ -143,8 +144,17 @@ namespace Template
             cursorPos = new Vector2(Mstate.X, Mstate.Y);
 
             // TODO: Add your update logic here
+            int x = (int)player.Position.X/BLOCK_SIZE;
+            int y = (int)player.Position.Y/BLOCK_SIZE;
 
-
+            if (map[y, x+1] == '0')
+            {
+                player.Position = new Vector2(x * BLOCK_SIZE, player.Position.Y);
+            }
+            else if(map[y, x-1] == '0')
+            {
+                player.Position = new Vector2(x * BLOCK_SIZE, player.Position.Y);
+            }
 
             base.Update(gameTime);
             weaponHandler.Update();
