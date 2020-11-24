@@ -12,12 +12,10 @@ namespace Template
     class Properties
     {
         protected int health;
-        protected Texture2D healthBar;
 
-        public Properties(int health, Texture2D healthBar)
+        public Properties(int health)
         {
             this.health = health;
-            this.healthBar = healthBar;
         }
 
         public int Health{
@@ -36,8 +34,8 @@ namespace Template
             }
         }
 
-        void Update() { }
+        public override void Update() { }
 
-        void Draw(SpriteBatch spriteBatch) { }
+        public override void Draw(SpriteBatch spriteBatch) { }
     }
 }

@@ -16,6 +16,14 @@ namespace Template
             set => texturePos = value;
         }
 
+        public BaseClass(Texture2D texture, Vector2 texturePos)
+        {
+            this.texture = texture;
+            this.texturePos = texturePos;
+            this.angle = 0;
+            this.mousePos = Vector2.Zero;
+        }
+
         public BaseClass(Texture2D texture, Vector2 texturePos, float angle, Vector2 mousePos)
         {
             this.texture = texture;

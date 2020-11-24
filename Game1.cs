@@ -59,7 +59,7 @@ namespace Template
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            Window.Title = "GEM - Generic platform game?";
+            Window.Title = "GEM - Generic game?";
         }
 
         /// <summary>
@@ -146,14 +146,27 @@ namespace Template
             // TODO: Add your update logic here
             int x = (int)player.Position.X/BLOCK_SIZE;
             int y = (int)player.Position.Y/BLOCK_SIZE;
+            int a = ((int)player.Position.X / BLOCK_SIZE)+1;
 
-            if (map[y, x+1] == '0')
+            if (map[y, x + 1] == '0' || map[y, x + 1] == '2')
             {
                 player.Position = new Vector2(x * BLOCK_SIZE, player.Position.Y);
             }
-            else if(map[y, x-1] == '0')
+            else if( map[y, a - 1] == '0' || map[y, a - 1] == '2')
             {
-                player.Position = new Vector2(x * BLOCK_SIZE, player.Position.Y);
+                player.Position = new Vector2(a * BLOCK_SIZE, player.Position.Y);
+            }
+
+           
+            int b = ((int)player.Position.Y / BLOCK_SIZE)+1;
+
+            if (map[y + 1, a] == '0' || map[y + 1, a] == '2')
+            {
+                player.Position = new Vector2(player.Position.X, y * BLOCK_SIZE);
+            }
+            else if ( map[b - 1, x] == '0' || map[b - 1, x] == '2')
+            {
+                player.Position = new Vector2(player.Position.X, b * BLOCK_SIZE);
             }
 
             base.Update(gameTime);
