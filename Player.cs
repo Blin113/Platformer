@@ -13,10 +13,10 @@ namespace Template
         MouseState old;
         MouseState current;
 
-        //var properties = new Properties();
-        //properties.Health = 100;
+        //int hp;
 
-        //Properties instance = new Properties(health, healthBar);
+        //Properties properties = new Properties(hp);
+        
 
         public Player(Texture2D texture, Vector2 texturePos, float angle, Vector2 mousePos) : base(texture, texturePos, angle, mousePos)
         {
