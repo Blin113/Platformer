@@ -1,7 +1,7 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 using System.Collections.Generic;
 
 namespace Template
@@ -31,17 +31,15 @@ namespace Template
         Vector2 speed;
         List<Bullet> bullets1 = new List<Bullet>();
 
-        //enemy, bullet
-        Texture2D eTexture;
+        //Enemy, enmey bullet
+        float eangle;
         Vector2 eTexturePos;
-        float eAngle;
-        List<Bullet> eBullets = new List<Bullet>();
 
         //classes
         Player player;
+        Enemy enemy;
         WeaponHandler weaponHandler;
         Bullet bullet;
-        Enemy enemy;
 
         const int BLOCK_SIZE = 40;
 
@@ -101,8 +99,6 @@ namespace Template
 
             bulletTexture = Content.Load<Texture2D>("bullet");
 
-            eTexture = Content.Load<Texture2D>("enemy");
-
 
             Color[] data = new Color[texture.Height * texture.Width];       //fixa png
             texture.GetData(data);
@@ -122,27 +118,24 @@ namespace Template
             }
             rock.SetData(data);                                             //fixa png
 
-
-            //ladda in variabler och texturer
-
-            //player, player bullets
             player = new Player(texture, texturePos, angle, mousePos);
             weaponHandler = new WeaponHandler(bullets1);
             player.SetWeaponHandler(weaponHandler);
 
-            //bullet
+            enemy = new Enemy(texture, eTexturePos, eangle);
+
             bullet = new Bullet(bulletTexture, texturePos, speed, angle, size, mousePos);
 
-            //enemy, enemy bullets
-            enemy = new Enemy(eTexture, eTexturePos, eAngle);
-            //weaponHandler = new WeaponHandler(eBullets);
-            //enemy.SetWeaponHandler(weaponHandler);
-
+            // TODO: use this.Content to load your game content here 
         }
 
+        /// <summary>
+        /// UnloadContent will be called once per game and is the place to unload
+        /// game-specific content.
+        /// </summary>
         protected override void UnloadContent()
         {
-
+            // TODO: Unload any non ContentManager content here
         }
 
         /// <summary>
@@ -158,7 +151,7 @@ namespace Template
             MouseState Mstate = Mouse.GetState();
             cursorPos = new Vector2(Mstate.X, Mstate.Y);
 
-                                                                                        //gränser för spelarens rörelse så den inte rör sig ut ur ettorna i char map
+            // TODO: Add your update logic here
             int x = (int)player.Position.X/BLOCK_SIZE;
             int y = (int)player.Position.Y/BLOCK_SIZE;
             int a = ((int)player.Position.X / BLOCK_SIZE)+1;
@@ -184,11 +177,10 @@ namespace Template
                 player.Position = new Vector2(player.Position.X, b * BLOCK_SIZE);
             }
 
-            base.Update(gameTime);      //kalla Update() metoder från klasserna
+            base.Update(gameTime);
             weaponHandler.Update();
-            bullet.Update();
+            //bullet.Update();
             player.Update();
-            //enemy.Update();
             
         }
 
@@ -200,9 +192,11 @@ namespace Template
         {
             GraphicsDevice.Clear(Color.DarkGray);
 
+            // TODO: Add your drawing code here.
+
             spriteBatch.Begin(SpriteSortMode.Texture, BlendState.NonPremultiplied);
 
-            for (int y = 0; y < map.GetLength(0); y++)      //draw map
+            for (int y = 0; y < map.GetLength(0); y++)
             {
                 for (int x = 0; x < map.GetLength(1); x++)
                 {
@@ -213,7 +207,7 @@ namespace Template
                 }
             }
 
-            for (int y = 0; y < map.GetLength(0); y++)      //draw map
+            for (int y = 0; y < map.GetLength(0); y++)
             {
                 for (int x = 0; x < map.GetLength(1); x++)
                 {
@@ -225,11 +219,11 @@ namespace Template
                 }
             }
 
-            player.Draw(spriteBatch);       //draw player
+            player.Draw(spriteBatch);
 
-            spriteBatch.Draw(croshair, new Rectangle((int)cursorPos.X - 50, (int)cursorPos.Y - 50, 100, 100), Color.Purple);        //draw mouse
+            spriteBatch.Draw(croshair, new Rectangle((int)cursorPos.X - 50, (int)cursorPos.Y - 50, 100, 100), Color.Purple);
 
-            foreach(Bullet item in bullets1)        //draw bullets
+            foreach(Bullet item in bullets1)
             {
                 item.Draw(spriteBatch);
             }
