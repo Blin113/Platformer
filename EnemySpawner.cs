@@ -13,9 +13,9 @@ namespace Template
         float timer = 0;
         Random rnd = new Random();
 
-        public EnemySpawner()
+        public EnemySpawner(List<Enemy> enemies)
         {
-
+            this.enemies = enemies;
         }
 
         public void Update(GameTime gameTime)
@@ -27,14 +27,24 @@ namespace Template
                 int y;
                 do
                 {
-                    x = rnd.Next(0, 800);
-                    y = rnd.Next(0, 480);
-                } while (true);
+                    x = rnd.Next(0, 800/40);
+                    y = rnd.Next(0, 480/40);
+                } while (Game1.Map[y,x] != 1);
             }
 
 
 
-
+            /*for (int y = 0; y < map.GetLength(0); y++)
+            {
+                for (int x = 0; x < map.GetLength(1); x++)
+                {
+                    if (map[y, x] == '1')
+                    {
+                        
+                    }
+                }
+            }
+               */ 
             timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
     }

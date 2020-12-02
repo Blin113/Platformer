@@ -34,16 +34,18 @@ namespace Template
         //Enemy, enmey bullet
         float eangle;
         Vector2 eTexturePos;
+        List<Enemy> enemies1 = new List<Enemy>();
 
         //classes
         Player player;
         Enemy enemy;
         WeaponHandler weaponHandler;
         Bullet bullet;
+        EnemySpawner enemySpawner;
 
         const int BLOCK_SIZE = 40;
 
-        char[,] map = new char[,] {
+        static char[,] map = new char[,] {
             { '0', '0', '0', '0', '0', '0', '0', '0', '0', '0' , '0', '0', '0', '0', '0', '0', '0', '0', '1', '1'},
             { '0', '0', '0', '0', '0', '0', '1', '1', '1', '1' , '1', '1', '1', '0', '0', '0', '0', '0', '1', '1'},
             { '0', '0', '0', '0', '0', '0', '1', '1', '1', '0' , '0', '0', '1', '0', '0', '0', '0', '0', '1', '1'},
@@ -58,6 +60,11 @@ namespace Template
             { '0', '0', '0', '0', '0', '0', '0', '0', '0', '0' , '0', '0', '0', '0', '0', '0', '0', '0', '1', '1'}
 
         };
+
+        public static char[,] Map
+        {
+            get => map;
+        }
 
         //KOmentar
         public Game1()
@@ -78,7 +85,7 @@ namespace Template
             // TODO: Add your initialization logic here
 
             //IsMouseVisible = true;
-
+            enemySpawner = new EnemySpawner(enemies1);
             base.Initialize();
         }
 
@@ -181,6 +188,7 @@ namespace Template
             weaponHandler.Update();
             //bullet.Update();
             player.Update();
+            enemySpawner.Update(gameTime);
             
         }
 
@@ -217,6 +225,11 @@ namespace Template
                         spriteBatch.Draw(rock, new Rectangle(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE), Color.White);
                     }
                 }
+            }
+
+            foreach (Enemy item in enemies1)
+            {
+                enemy.Draw(spriteBatch);
             }
 
             player.Draw(spriteBatch);
