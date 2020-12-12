@@ -34,8 +34,12 @@ namespace Template
             }
         }
 
-        //public override void Update() { }
+        public void Update() 
+        {
 
-        //public override void Draw(SpriteBatch spriteBatch) { }
+
+        }
+
+        
     }
 }

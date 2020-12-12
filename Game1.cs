@@ -15,33 +15,31 @@ namespace Template
         SpriteBatch spriteBatch;
 
         //map
-        Texture2D groundTexture;
-        Texture2D rock;
+        private Texture2D groundTexture;
+        private Texture2D rock;
 
         //mouse
-        Texture2D croshair;
-        Vector2 cursorPos;
-        Vector2 mousePos;
+        private Texture2D croshair;
+        private Vector2 cursorPos;
+        private Vector2 mousePos;
 
         //player, bullet
-        Texture2D texture, bulletTexture;
-        float angle;
-        Vector2 texturePos = new Vector2(40, 200);
-        Point size;
-        Vector2 speed;
-        List<Bullet> bullets1 = new List<Bullet>();
+        private Texture2D texture, bulletTexture;
+        private float angle;
+        private Vector2 texturePos = new Vector2(40, 200);
+        private Point size;
+        private Vector2 speed;
+        private List<Bullet> bullets1 = new List<Bullet>();
+
 
         //Enemy, enmey bullet
-        float eangle;
-        Vector2 eTexturePos;
-        List<Enemy> enemies1 = new List<Enemy>();
+        private List<Enemy> enemies1 = new List<Enemy>();
 
         //classes
-        Player player;
-        Enemy enemy;
-        WeaponHandler weaponHandler;
-        Bullet bullet;
-        EnemySpawner enemySpawner;
+        private Player player;
+        private WeaponHandler weaponHandler;
+        private Properties properties;
+        private EnemySpawner enemySpawner;
 
         const int BLOCK_SIZE = 40;
 
@@ -85,7 +83,7 @@ namespace Template
             // TODO: Add your initialization logic here
 
             //IsMouseVisible = true;
-            enemySpawner = new EnemySpawner(enemies1);
+            enemySpawner = new EnemySpawner(enemies1, bullets1);
             base.Initialize();
         }
 
@@ -98,6 +96,8 @@ namespace Template
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            Assets.LoadAssets(Content);
+
             groundTexture = Content.Load<Texture2D>("groundTexture");
             rock = Content.Load<Texture2D>("rock");
 
@@ -105,7 +105,6 @@ namespace Template
             croshair = Content.Load<Texture2D>("croshair");
 
             bulletTexture = Content.Load<Texture2D>("bullet");
-
 
             Color[] data = new Color[texture.Height * texture.Width];       //fixa png
             texture.GetData(data);
@@ -128,11 +127,7 @@ namespace Template
             player = new Player(texture, texturePos, angle, mousePos);
             weaponHandler = new WeaponHandler(bullets1);
             player.SetWeaponHandler(weaponHandler);
-
-            enemy = new Enemy(texture, eTexturePos, eangle);
-
-            bullet = new Bullet(bulletTexture, texturePos, speed, angle, size, mousePos);
-
+            //player.SetProperties(properties);
             // TODO: use this.Content to load your game content here 
         }
 
@@ -186,9 +181,14 @@ namespace Template
 
             base.Update(gameTime);
             weaponHandler.Update();
-            //bullet.Update();
             player.Update();
+            foreach (Enemy item in enemies1)
+            {
+                item.Update();
+            }
             enemySpawner.Update(gameTime);
+
+            Collision();
             
         }
 
@@ -202,9 +202,9 @@ namespace Template
 
             // TODO: Add your drawing code here.
 
-            spriteBatch.Begin(SpriteSortMode.Texture, BlendState.NonPremultiplied);
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied);
 
-            for (int y = 0; y < map.GetLength(0); y++)
+            for (int y = 0; y < map.GetLength(0); y++)      //rita ut marken
             {
                 for (int x = 0; x < map.GetLength(1); x++)
                 {
@@ -215,7 +215,7 @@ namespace Template
                 }
             }
 
-            for (int y = 0; y < map.GetLength(0); y++)
+            for (int y = 0; y < map.GetLength(0); y++)      //rita ut stenar
             {
                 for (int x = 0; x < map.GetLength(1); x++)
                 {
@@ -227,23 +227,73 @@ namespace Template
                 }
             }
 
-            foreach (Enemy item in enemies1)
-            {
-                enemy.Draw(spriteBatch);
-            }
-
-            player.Draw(spriteBatch);
-
-            spriteBatch.Draw(croshair, new Rectangle((int)cursorPos.X - 50, (int)cursorPos.Y - 50, 100, 100), Color.Purple);
-
-            foreach(Bullet item in bullets1)
+            foreach (Bullet item in bullets1)   //rita ut bullets
             {
                 item.Draw(spriteBatch);
             }
+
+            foreach (Enemy item in enemies1)        //rita ut fiender
+            {
+                item.Draw(spriteBatch);
+            }
+
+            player.Draw(spriteBatch);       //rita ut spelaren
+
+            spriteBatch.Draw(croshair, new Rectangle((int)cursorPos.X - 50, (int)cursorPos.Y - 50, 100, 100), Color.Purple); 
 
             spriteBatch.End();
 
             base.Draw(gameTime);
         }
+
+        public void Collision()
+        {
+            for(int i = 0; i < bullets1.Count; i++)
+            {
+                for (int j = 0; j < enemies1.Count; j++)
+                {
+                    if (bullets1[i].GetDamageOrigin == DamageOrigin.player && enemies1[j].HitBox.Intersects(bullets1[i].HitBox))
+                    {
+                        enemies1.RemoveAt(j);
+                        bullets1.RemoveAt(i);
+
+                        i--;
+                        break;
+                    }
+                }
+            }
+
+            /*
+            for (int y = 0; y < map.GetLength(0); y++)
+            {
+                for (int x = 0; x < map.GetLength(1); x++)
+                {
+                    for (int i = 0; i < bullets1.Count; i++)
+                    {
+                        if (map[y, x] == '2' && new Rectangle(x, y, BLOCK_SIZE, BLOCK_SIZE).Intersects(bullets1[i].HitBox))
+                        {
+                            bullets1.RemoveAt(i);
+
+                            i--;
+                            break;
+                        }
+                    }
+                }
+            }
+            */
+
+            for (int i = 0; i < bullets1.Count; i++)
+            {
+                if (bullets1[i].GetDamageOrigin == DamageOrigin.enemy && player.HitBox.Intersects(bullets1[i].HitBox))
+                {   
+                    bullets1.RemoveAt(i);
+
+                    i--;
+                    Console.WriteLine("you died!");
+                    Exit();
+                }
+            }
+        }
+
     }
 }

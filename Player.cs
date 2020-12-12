@@ -8,19 +8,21 @@ namespace Template
 {
     class Player : BaseClass
     {
-        WeaponHandler weaponHandler;
+        private WeaponHandler weaponHandler;
 
-        MouseState old;
-        MouseState current;
+        private MouseState old;
+        private MouseState current;
 
-        //int hp;
+        private Properties properties;
 
-        //Properties properties = new Properties(hp);
-        
+        public static Vector2 CurrentPlayerPos;
 
         public Player(Texture2D texture, Vector2 texturePos, float angle, Vector2 mousePos) : base(texture, texturePos, angle, mousePos)
         {
+            hitBox.Size = new Point(40,40);
 
+            
+            //properties.Health = 100;
         }
 
         public override void Update()
@@ -75,10 +77,16 @@ namespace Template
 
             if (current.LeftButton == ButtonState.Pressed && old.LeftButton == ButtonState.Released)
             {
-                weaponHandler.Shoot(texture, texturePos + new Vector2(0,8), angle, new Vector2(1,1), new Point((int)texturePos.X + 10 / 2, (int)texturePos.Y + 10 / 2), mousePos);
+                weaponHandler.Shoot(texture, texturePos + new Vector2(0,8), angle, new Vector2(1,1), new Point(), mousePos, DamageOrigin.player);
             }
 
             old = Mouse.GetState();
+
+
+            CurrentPlayerPos = new Vector2(texturePos.X, texturePos.Y);
+
+            hitBox.Location = texturePos.ToPoint();
+
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -90,5 +98,11 @@ namespace Template
         {
             weaponHandler = wH;
         }
+        /*
+        public void SetProperties(Properties prop)
+        {
+            properties = prop;
+        }
+        */
     }
 }

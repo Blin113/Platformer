@@ -21,9 +21,9 @@ namespace Template
             }
         }
 
-        public void Shoot(Texture2D bulletTexture, Vector2 playerPos, float angle, Vector2 speed, Point size, Vector2 mousePos)
+        public void Shoot(Texture2D bulletTexture, Vector2 playerPos, float angle, Vector2 speed, Point size, Vector2 mousePos, DamageOrigin damageOrigin)
         {
-            bullets.Add(new Bullet(bulletTexture, playerPos, speed, angle, size, mousePos));
+            bullets.Add(new Bullet(bulletTexture, playerPos, speed, angle, size, mousePos, damageOrigin));
         }
     }
 }

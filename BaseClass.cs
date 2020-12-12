@@ -9,11 +9,17 @@ namespace Template
         protected Vector2 texturePos;
         protected float angle = 0;
         protected Vector2 mousePos;
+        protected Rectangle hitBox;
 
         public Vector2 Position
         {
             get => texturePos;
             set => texturePos = value;
+        }
+
+        public Rectangle HitBox
+        {
+            get => hitBox;
         }
 
         public BaseClass(Texture2D texture, Vector2 texturePos, float angle)
