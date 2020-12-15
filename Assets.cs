@@ -15,10 +15,17 @@ namespace Template
             private set;
         }
 
+        public static Texture2D bulletTexture
+        {
+            get;
+            private set;
+        }
+
         public static void LoadAssets(ContentManager contentManager)
         {
             Enemy = contentManager.Load<Texture2D>("enemy");
-        }
 
+            bulletTexture = contentManager.Load<Texture2D>("bullet");
+        }
     }
 }

@@ -24,7 +24,7 @@ namespace Template
         private Vector2 mousePos;
 
         //player, bullet
-        private Texture2D texture, bulletTexture;
+        private Texture2D texture;
         private float angle;
         private Vector2 texturePos = new Vector2(40, 200);
         private Point size;
@@ -103,8 +103,6 @@ namespace Template
 
             texture = Content.Load<Texture2D>("man");
             croshair = Content.Load<Texture2D>("croshair");
-
-            bulletTexture = Content.Load<Texture2D>("bullet");
 
             Color[] data = new Color[texture.Height * texture.Width];       //fixa png
             texture.GetData(data);

@@ -7,7 +7,7 @@ namespace Template
     class Bullet : BaseClass
     {
         private Vector2 speed;
-        private Point size = new Point(5, 5);
+        private Point size = new Point(10, 2);
 
         private DamageOrigin damageOrigin;
 
@@ -34,7 +34,7 @@ namespace Template
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture, new Rectangle((int)texturePos.X, (int)texturePos.Y, size.X, size.Y), null, Color.White, angle, new Vector2(texturePos.X + texture.Width / 2, texturePos.Y + texture.Height / 2), SpriteEffects.None, 0);
+            spriteBatch.Draw(Assets.bulletTexture, new Rectangle((int)texturePos.X, (int)texturePos.Y, size.X, size.Y), null, Color.White, angle, new Vector2(texturePos.X + texture.Width / 2, texturePos.Y + texture.Height / 2), SpriteEffects.None, 0);
         }
     }
 
