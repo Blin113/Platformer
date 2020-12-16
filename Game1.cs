@@ -261,24 +261,21 @@ namespace Template
                 }
             }
 
-            /*
             for (int y = 0; y < map.GetLength(0); y++)
             {
                 for (int x = 0; x < map.GetLength(1); x++)
                 {
                     for (int i = 0; i < bullets1.Count; i++)
                     {
-                        if (map[y, x] == '2' && new Rectangle(x, y, BLOCK_SIZE, BLOCK_SIZE).Intersects(bullets1[i].HitBox))
+                        if (map[y, x] == '2' && new Rectangle(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE).Intersects(bullets1[i].HitBox))
                         {
                             bullets1.RemoveAt(i);
 
                             i--;
-                            break;
                         }
                     }
                 }
             }
-            */
 
             for (int i = 0; i < bullets1.Count; i++)
             {
@@ -287,7 +284,7 @@ namespace Template
                     bullets1.RemoveAt(i);
 
                     i--;
-                    Console.WriteLine("you died!");
+                    
                     Exit();
                 }
             }
