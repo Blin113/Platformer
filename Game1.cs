@@ -1,8 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System;
-using System.Collections.Generic;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Media;
 
 namespace Template
 {
@@ -14,62 +14,29 @@ namespace Template
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        //map
-        private Texture2D groundTexture;
-        private Texture2D rock;
+        //Menu
+        private Menu menu = new Menu();
 
-        //mouse
-        private Texture2D croshair;
-        private Vector2 cursorPos;
-        private Vector2 mousePos;
+        //grid
+        private Grid grid = new Grid();
 
-        //player, bullet
-        private Texture2D texture;
-        private float angle;
-        private Vector2 texturePos = new Vector2(40, 200);
-        private Point size;
-        private Vector2 speed;
-        private List<Bullet> bullets1 = new List<Bullet>();
+        //Camera
+        private Camera camera;
 
-
-        //Enemy, enmey bullet
-        private List<Enemy> enemies1 = new List<Enemy>();
-
-        //classes
+        //player
         private Player player;
-        private WeaponHandler weaponHandler;
-        private Properties properties;
-        private EnemySpawner enemySpawner;
+        private Vector2 texturePos = new Vector2(240, 240);
 
-        const int BLOCK_SIZE = 40;
-
-        static char[,] map = new char[,] {
-            { '0', '0', '0', '0', '0', '0', '0', '0', '0', '0' , '0', '0', '0', '0', '0', '0', '0', '0', '1', '1'},
-            { '0', '0', '0', '0', '0', '0', '1', '1', '1', '1' , '1', '1', '1', '0', '0', '0', '0', '0', '1', '1'},
-            { '0', '0', '0', '0', '0', '0', '1', '1', '1', '0' , '0', '0', '1', '0', '0', '0', '0', '0', '1', '1'},
-            { '1', '1', '1', '1', '1', '1', '1', '1', '1', '1' , '1', '1', '1', '1', '1', '1', '1', '1', '1', '1'},
-            { '1', '1', '1', '1', '1', '1', '1', '1', '1', '1' , '1', '1', '1', '1', '1', '1', '1', '1', '1', '1'},
-            { '1', '1', '1', '0', '0', '1', '1', '1', '1', '1' , '1', '1', '1', '1', '1', '1', '1', '1', '1', '1'},
-            { '1', '1', '1', '0', '0', '1', '1', '1', '1', '1' , '1', '1', '1', '1', '1', '1', '1', '1', '1', '1'},
-            { '1', '1', '1', '1', '1', '1', '1', '1', '1', '2' , '1', '1', '1', '1', '1', '1', '1', '1', '1', '1'},
-            { '1', '1', '1', '1', '1', '1', '1', '1', '1', '1' , '1', '1', '1', '1', '1', '1', '1', '1', '1', '1'},
-            { '0', '0', '0', '0', '0', '0', '1', '1', '1', '0' , '0', '0', '1', '0', '0', '0', '0', '0', '1', '1'},
-            { '0', '0', '0', '0', '0', '0', '1', '1', '1', '1' , '1', '1', '1', '0', '0', '0', '0', '0', '1', '1'},
-            { '0', '0', '0', '0', '0', '0', '0', '0', '0', '0' , '0', '0', '0', '0', '0', '0', '0', '0', '1', '1'}
-
-        };
-
-        public static char[,] Map
-        {
-            get => map;
-        }
+        //angle and mouse
+        private float angle;
+        private Vector2 mousePos;
 
         //KOmentar
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            Window.Title = "GEM - Generic game?";
+            IsMouseVisible = true;
         }
 
         /// <summary>
@@ -82,8 +49,8 @@ namespace Template
         {
             // TODO: Add your initialization logic here
 
-            //IsMouseVisible = true;
-            enemySpawner = new EnemySpawner(enemies1, bullets1);
+            camera = new Camera(GraphicsDevice.Viewport);
+
             base.Initialize();
         }
 
@@ -95,38 +62,12 @@ namespace Template
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            Assets.LoadAssets(Content, GraphicsDevice);
 
-            Assets.LoadAssets(Content);
+            player = new Player(Assets.Player, texturePos, angle, mousePos);
 
-            groundTexture = Content.Load<Texture2D>("groundTexture");
-            rock = Content.Load<Texture2D>("rock");
-
-            texture = Content.Load<Texture2D>("man");
-            croshair = Content.Load<Texture2D>("croshair");
-
-            Color[] data = new Color[texture.Height * texture.Width];       //fixa png
-            texture.GetData(data);
-            for (int i = 0; i < data.Length; i++)
-            {
-                if (data[i].R >= 220)
-                    data[i] = new Color(0,0,0,0);
-            }
-            texture.SetData(data);
-
-            data = new Color[rock.Height * rock.Width];
-            rock.GetData(data);
-            for (int i = 0; i < data.Length; i++)
-            {
-                if (data[i].R >= 230)
-                    data[i].A = 0;
-            }
-            rock.SetData(data);                                             //fixa png
-
-            player = new Player(texture, texturePos, angle, mousePos);
-            weaponHandler = new WeaponHandler(bullets1);
-            player.SetWeaponHandler(weaponHandler);
-            //player.SetProperties(properties);
             // TODO: use this.Content to load your game content here 
+            camera.SetTarget(player);
         }
 
         /// <summary>
@@ -148,46 +89,15 @@ namespace Template
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            MouseState Mstate = Mouse.GetState();
-            cursorPos = new Vector2(Mstate.X, Mstate.Y);
-
-            // TODO: Add your update logic here
-            int x = (int)player.Position.X/BLOCK_SIZE;
-            int y = (int)player.Position.Y/BLOCK_SIZE;
-            int a = ((int)player.Position.X / BLOCK_SIZE)+1;
-
-            if (map[y, x + 1] == '0' || map[y, x + 1] == '2')
+            // If not in a menu, run game
+            if(menu.CurrentMenu == CurrentMenu.None)
             {
-                player.Position = new Vector2(x * BLOCK_SIZE, player.Position.Y);
+                camera.UpdateCamera(GraphicsDevice.Viewport);
+                player.Update();
             }
-            else if( map[y, a - 1] == '0' || map[y, a - 1] == '2')
-            {
-                player.Position = new Vector2(a * BLOCK_SIZE, player.Position.Y);
-            }
-
-           
-            int b = ((int)player.Position.Y / BLOCK_SIZE)+1;
-
-            if (map[y + 1, a] == '0' || map[y + 1, a] == '2')
-            {
-                player.Position = new Vector2(player.Position.X, y * BLOCK_SIZE);
-            }
-            else if ( map[b - 1, x] == '0' || map[b - 1, x] == '2')
-            {
-                player.Position = new Vector2(player.Position.X, b * BLOCK_SIZE);
-            }
+            menu.Update();
 
             base.Update(gameTime);
-            weaponHandler.Update();
-            player.Update();
-            foreach (Enemy item in enemies1)
-            {
-                item.Update();
-            }
-            enemySpawner.Update(gameTime);
-
-            Collision();
-            
         }
 
         /// <summary>
@@ -196,99 +106,26 @@ namespace Template
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.DarkGray);
+            GraphicsDevice.Clear(Color.Black);
 
             // TODO: Add your drawing code here.
+            spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, camera.Transform);
 
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied);
-
-            for (int y = 0; y < map.GetLength(0); y++)      //rita ut marken
+            if(menu.CurrentMenu == CurrentMenu.None || menu.CurrentMenu == CurrentMenu.PauseMenu)
             {
-                for (int x = 0; x < map.GetLength(1); x++)
-                {
-                    if (map[y, x] == '1')
-                    {
-                        spriteBatch.Draw(groundTexture, new Rectangle(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE), Color.White);
-                    }
-                }
+                grid.Draw(spriteBatch, Assets.Pixel);
+                player.Draw(spriteBatch);
             }
 
-            for (int y = 0; y < map.GetLength(0); y++)      //rita ut stenar
-            {
-                for (int x = 0; x < map.GetLength(1); x++)
-                {
-                    if (map[y, x] == '2')
-                    {
-                        spriteBatch.Draw(groundTexture, new Rectangle(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE), Color.White);
-                        spriteBatch.Draw(rock, new Rectangle(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE), Color.White);
-                    }
-                }
-            }
+            spriteBatch.End();
 
-            foreach (Bullet item in bullets1)   //rita ut bullets
-            {
-                item.Draw(spriteBatch);
-            }
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
 
-            foreach (Enemy item in enemies1)        //rita ut fiender
-            {
-                item.Draw(spriteBatch);
-            }
-
-            player.Draw(spriteBatch);       //rita ut spelaren
-
-            spriteBatch.Draw(croshair, new Rectangle((int)cursorPos.X - 50, (int)cursorPos.Y - 50, 100, 100), Color.Purple); 
+            menu.Draw(spriteBatch);
 
             spriteBatch.End();
 
             base.Draw(gameTime);
         }
-
-        public void Collision()
-        {
-            for(int i = 0; i < bullets1.Count; i++)
-            {
-                for (int j = 0; j < enemies1.Count; j++)
-                {
-                    if (bullets1[i].GetDamageOrigin == DamageOrigin.player && enemies1[j].HitBox.Intersects(bullets1[i].HitBox))
-                    {
-                        enemies1.RemoveAt(j);
-                        bullets1.RemoveAt(i);
-
-                        i--;
-                        break;
-                    }
-                }
-            }
-
-            for (int y = 0; y < map.GetLength(0); y++)
-            {
-                for (int x = 0; x < map.GetLength(1); x++)
-                {
-                    for (int i = 0; i < bullets1.Count; i++)
-                    {
-                        if (map[y, x] == '2' && new Rectangle(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE).Intersects(bullets1[i].HitBox))
-                        {
-                            bullets1.RemoveAt(i);
-
-                            i--;
-                        }
-                    }
-                }
-            }
-
-            for (int i = 0; i < bullets1.Count; i++)
-            {
-                if (bullets1[i].GetDamageOrigin == DamageOrigin.enemy && player.HitBox.Intersects(bullets1[i].HitBox))
-                {   
-                    bullets1.RemoveAt(i);
-
-                    i--;
-                    
-                    Exit();
-                }
-            }
-        }
-
     }
 }
